@@ -1,2 +1,2 @@
 # md-tools
-Toolls and utilities for markdown
+Tools and utilities for markdown

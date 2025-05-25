@@ -3,6 +3,7 @@ import * as path from "path";
 import * as readline from "readline";
 import { parseLine } from "./parseLine";
 import { fileFromBase64 } from "./fileFromBase64";
+import { replaceImageLinks } from "./replaceImageLinks";
 
 /**
  * Reads the content of a source file line by line and writes it to a destination file.
@@ -51,7 +52,7 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
         fileFromBase64(path.join(destinationPath, "images"), parsed.name + ".png", parsed.encodedImage);
       }
       if (parsed._tag === "plainLine") {
-        const canWrite = writableStream.write(line + "\n");
+        const canWrite = writableStream.write(replaceImageLinks(line) + "\n");
         if (!canWrite) {
           readableStream.pause(); // Pausing readableStream also pauses readline
           writableStream.once("drain", () => {

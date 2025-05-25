@@ -11,9 +11,9 @@ describe("extractPngsFromFile", () => {
   });
 
   afterAll(async () => {
-    if (tempTestDir) {
-      await fs.rm(tempTestDir, { recursive: true, force: true });
-    }
+    // if (tempTestDir) {
+    //   await fs.rm(tempTestDir, { recursive: true, force: true });
+    // }
   });
 
   test("given an input file with no images, it just copies the file", async () => {
@@ -38,10 +38,23 @@ describe("extractPngsFromFile", () => {
     const filePath = path.join(tempTestDir, testFilename);
     await expect(fs.access(filePath)).resolves.toBeUndefined();
 
-    // // Assert: File content is correct
     const inputContent = await fs.readFile(expectedFilePath, "utf8");
     const writtenContent = await fs.readFile(filePath, "utf8");
     expect(writtenContent).toEqual(inputContent);
+    
+  });
+
+  test("given an input file with images, it it creates files with the images", async () => {
+    const testFilePath = "testdata/test-file-with-image.md";
+    const expectedFilePath = "testdata/expected-file-with-image-removed.md";
+    const testFilename = "test-file-with-image.md";
+    await extractPngsFromFile( testFilePath, tempTestDir);
+    const filePath = path.join(tempTestDir, "images","image1.png");
+    await expect(fs.access(filePath)).resolves.toBeUndefined();
+
+    const inputContent = await fs.readFile(expectedFilePath, "utf8");
+    const writtenContent = await fs.readFile(filePath, "utf8");
+    expect(writtenContent).toMatchSnapshot()
     
   });
 

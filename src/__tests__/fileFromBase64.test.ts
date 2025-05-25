@@ -1,21 +1,9 @@
 import path from "path";
 import fs from "fs/promises"; // For asynchronous file operations
 import os from "os"; // For temporary directory creation
-import { PathLike } from "fs";
+import { fileFromBase64 } from "../fileFromBase64";
 
 const content64 = "aGVsbG8Kd29ybGQKCg==";
-
-/**
- * Decodes a base64 string and writes the resulting bytes to a file.
- * @param basePath - A parsed path object representing the target directory.
- * @param filename - The name of the file to create in the basePath.
- * @param content64 - The base64 encoded string content.
- */
-async function fileFromBase64(basePath: string, filename: string, content64: string): Promise<void> {
-  const decodedBytes = Buffer.from(content64, "base64");
-  const fullPath = path.join(basePath, filename);
-  await fs.writeFile(fullPath, decodedBytes);
-}
 
 const content = "hello\nworld\n\n";
 describe("fileFromBase64", () => {

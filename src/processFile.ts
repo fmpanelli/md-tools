@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as readline from "readline";
 import { parseLine } from "./parseLine";
+import { fileFromBase64 } from "./fileFromBase64";
 
 /**
  * Reads the content of a source file line by line and writes it to a destination file.
@@ -13,6 +14,8 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
   const absoluteSourcePath = path.resolve(sourcePath);
   const sourceFilename = path.basename(sourcePath);
   const absoluteDestinationPath = path.resolve(path.join(destinationPath, sourceFilename));
+  const imageDestinationPath = path.join(destinationPath, "images");
+  createFolderIfNotExists(imageDestinationPath);
 
   console.log(`Starting line-by-line copy from: ${absoluteSourcePath}`);
   console.log(`Streaming line-by-line to: ${absoluteDestinationPath}`);
@@ -44,6 +47,9 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
     rl.on("line", (line) => {
       if (settled) return; // Stop processing if an error has occurred
       const parsed = parseLine(line);
+      if (parsed._tag === "imageLine") {
+        fileFromBase64(path.join(destinationPath, "images"), parsed.name + ".png", parsed.encodedImage);
+      }
       if (parsed._tag === "plainLine") {
         const canWrite = writableStream.write(line + "\n");
         if (!canWrite) {
@@ -70,4 +76,11 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
       });
     });
   });
+}
+
+/** create a folder if it does not exist */
+export function createFolderIfNotExists(folderPath: string): void {
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
+  }
 }

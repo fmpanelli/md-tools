@@ -20,6 +20,10 @@
     "url": "https://github.com/fmpanelli/md-tools/issues"
   },
   "homepage": "https://github.com/fmpanelli/md-tools#readme",
+  "bin": {
+    "md-unbundle": "target/main.js"
+  },
+  "dependencies": {},
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@tsconfig/node20": "^20.1.5",

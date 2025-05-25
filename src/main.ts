@@ -1,9 +1,11 @@
+#!/usr/bin/env node 
+
 import { exit } from "node:process";
 import { extractPngsFromFile } from "./processFile";
 
 const cliArgs = process.argv.slice(2);
 if (cliArgs.length !== 2) {
-  console.error("Syntax: mdunbundle input-file output-folder");
+  console.error("Syntax: md-unbundle input-file output-folder");
   exit(1);
 }
 

@@ -1,0 +1,8 @@
+{
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "sourceMap": true, /* Generates corresponding '.map' file. */
+  "compilerOptions": {
+    "outDir": "./target", /* Redirect output structure to the directory. */
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+  }
+}

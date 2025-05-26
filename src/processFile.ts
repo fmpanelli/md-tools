@@ -18,8 +18,8 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
   const imageDestinationPath = path.join(destinationPath, "images");
   createFolderIfNotExists(imageDestinationPath);
 
-  console.log(`Starting line-by-line copy from: ${absoluteSourcePath}`);
-  console.log(`Streaming line-by-line to: ${absoluteDestinationPath}`);
+  console.log(`Starting processing: ${absoluteSourcePath}`);
+  console.log(`Streaming to: ${absoluteDestinationPath}`);
 
   const readableStream = fs.createReadStream(absoluteSourcePath, { encoding: "utf8" });
   const writableStream = fs.createWriteStream(absoluteDestinationPath, { encoding: "utf8" });

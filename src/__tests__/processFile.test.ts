@@ -17,8 +17,22 @@ describe("extractPngsFromFile", () => {
   });
 
   test("given an input file with no images, it just copies the file", async () => {
-    const testFilePath = "testdata/test-file-no-image.md";
-    const testFilename = "test-file-no-image.md";
+    const testFilePath = "testdata/test-file-no-image-lf.md";
+    const testFilename = "test-file-no-image-lf.md";
+    await extractPngsFromFile(testFilePath, tempTestDir);
+    const filePath = path.join(tempTestDir, testFilename);
+    await expect(fs.access(filePath)).resolves.toBeUndefined();
+
+    // // Assert: File content is correct
+    const inputContent = await fs.readFile(testFilePath, "utf8");
+    const writtenContent = await fs.readFile(filePath, "utf8");
+    expect(writtenContent).toEqual(inputContent);
+  });
+
+
+  test("crlf are preserved", async () => {
+    const testFilePath = "testdata/test-file-no-image-crlf.md";
+    const testFilename = "test-file-no-image-crlf.md";
     await extractPngsFromFile(testFilePath, tempTestDir);
     const filePath = path.join(tempTestDir, testFilename);
     await expect(fs.access(filePath)).resolves.toBeUndefined();

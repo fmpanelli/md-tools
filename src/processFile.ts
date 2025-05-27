@@ -4,6 +4,7 @@ import * as readline from "readline";
 import { parseLine } from "./parseLine";
 import { fileFromBase64 } from "./fileFromBase64";
 import { replaceImageLinks } from "./replaceImageLinks";
+import { LineSplitterStream } from "./readline";
 
 /**
  * Reads the content of a source file line by line and writes it to a destination file.
@@ -23,10 +24,7 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
 
   const readableStream = fs.createReadStream(absoluteSourcePath, { encoding: "utf8" });
   const writableStream = fs.createWriteStream(absoluteDestinationPath, { encoding: "utf8" });
-  const rl = readline.createInterface({
-    input: readableStream,
-    crlfDelay: Infinity, // Handles all \r\n instances as a single line break
-  });
+  const rl = new LineSplitterStream(readableStream);
 
   return new Promise<void>((resolve, reject) => {
     let settled = false; // To ensure resolve/reject is called only once
@@ -45,14 +43,14 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
     writableStream.on("error", (err) => handleError(err, "writable stream"));
     rl.on("error", (err) => handleError(err, "readline interface"));
 
-    rl.on("line", (line) => {
+    rl.on("line", (buf:Buffer) => {
       if (settled) return; // Stop processing if an error has occurred
-      const parsed = parseLine(line);
+      const parsed = parseLine(buf.toString());
       if (parsed._tag === "imageLine") {
         fileFromBase64(path.join(destinationPath, "images"), parsed.name + ".png", parsed.encodedImage);
       }
       if (parsed._tag === "plainLine") {
-        const canWrite = writableStream.write(replaceImageLinks(line) + "\n");
+        const canWrite = writableStream.write(replaceImageLinks(buf.toString()) );
         if (!canWrite) {
           readableStream.pause(); // Pausing readableStream also pauses readline
           writableStream.once("drain", () => {

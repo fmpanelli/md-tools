@@ -1,5 +1,5 @@
 {
-  "name": "md-tools",
+  "name": "@fmpanelli/md-tools",
   "version": "0.0.1",
   "description": "Tools and utilities for markdown",
   "main": "index.js",

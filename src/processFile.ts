@@ -43,11 +43,11 @@ export async function extractPngsFromFile(sourcePath: string, destinationPath: s
     writableStream.on("error", (err) => handleError(err, "writable stream"));
     rl.on("error", (err) => handleError(err, "readline interface"));
 
-    rl.on("line", (buf:Buffer) => {
+    rl.on("line", async (buf:Buffer) => {
       if (settled) return; // Stop processing if an error has occurred
       const parsed = parseLine(buf.toString());
       if (parsed._tag === "imageLine") {
-        fileFromBase64(path.join(destinationPath, "images"), parsed.name + ".png", parsed.encodedImage);
+        await fileFromBase64(path.join(destinationPath, "images"), parsed.name + ".png", parsed.encodedImage);
       }
       if (parsed._tag === "plainLine") {
         const canWrite = writableStream.write(replaceImageLinks(buf.toString()) );

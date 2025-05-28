@@ -1,4 +1,4 @@
-import { BufferSearchResult, findCrLf, splitByCrLf, splitByLf } from "../bufferUtils";
+import { BufferSearchResult, findCrLf, splitByLf } from "../bufferUtils";
 
 describe("findCrLf", () => {
   test.each([

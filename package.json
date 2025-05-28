@@ -1,12 +1,14 @@
 {
   "name": "@fmpanelli/md-tools",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Tools and utilities for markdown",
-  "main": "index.js",
+  "main": "dist/main.js",
   "scripts": {
     "test": "jest",
     "types:check": "tsc --noEmit",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint"
   },
   "repository": {
     "type": "git",

@@ -11,9 +11,9 @@ describe("extractPngsFromFile", () => {
   });
 
   afterAll(async () => {
-    // if (tempTestDir) {
-    //   await fs.rm(tempTestDir, { recursive: true, force: true });
-    // }
+    if (tempTestDir) {
+      await fs.rm(tempTestDir, { recursive: true, force: true });
+    }
   });
 
   test("given an input file with no images, it just copies the file", async () => {

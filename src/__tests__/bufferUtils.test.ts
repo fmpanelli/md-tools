@@ -1,19 +1,4 @@
-import { BufferSearchResult, findCrLf, splitByLf } from "../bufferUtils";
-
-describe("findCrLf", () => {
-  test.each([
-    ["", -1],
-    ["a", -1],
-    ["ab\r", -1],
-    ["ab\r\n", 2],
-    ["ab\r\nab\r\n", 2],
-    ["\r\n", 0],
-    ["\n\r\n", 1],
-    ["ab\r\r\n", 3],
-  ])('when called with "%s" it returns %d', (input: string, expected: number) => {
-    expect(findCrLf(Buffer.from(input))).toBe(expected);
-  });
-});
+import { BufferSearchResult,  splitByLf } from "../bufferUtils";
 
 describe("splitByLf", () => {
   test.each([

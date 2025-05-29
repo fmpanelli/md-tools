@@ -18,7 +18,6 @@ export const LineProcessorStream = (destinationPath: string) => {
             return replaceImageLinks(chunk.toString());
         }
       }
-      console.log(chunk.toString);
       process(chunk.toString()).then((s) => {
         if (s) this.push(s);
         callback();

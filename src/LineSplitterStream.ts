@@ -1,6 +1,19 @@
 import { Buffer } from "buffer";
-import { splitByLf } from "./bufferUtils";
 import { Transform } from "node:stream";
+
+export type BufferSearchResult = {
+  head: Buffer | undefined;
+  tail: Buffer;
+};
+
+export function splitByLf(b: Buffer): BufferSearchResult {
+  const LF = 0x0a; // \n
+  const lfPos = b.indexOf(LF);
+  if (lfPos >= 0) {
+    return { head: b.subarray(0, lfPos + 1), tail: b.subarray(lfPos + 1) };
+  }
+  return { head: undefined, tail: b };
+}
 
 export const LineSplitterStream = () => {
   let _buffer = Buffer.alloc(0);
@@ -20,11 +33,10 @@ export const LineSplitterStream = () => {
       if (typeof chunk === "string") chunk = Buffer.from(chunk);
       eatchunk(chunk, this);
       callback();
-    },    
+    },
     flush(callback) {
       if (_buffer.length > 0) this.push(_buffer);
       callback();
     },
   });
 };
-

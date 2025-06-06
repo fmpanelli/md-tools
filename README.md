@@ -1,5 +1,9 @@
 # md-tools
-Tools and utilities for markdown
+Tools and utilities for markdown.
+
+This package contains the following utilities:
+- `unbundle`
+- _...more will hopefully follow..._
 
 ## Unbundle
 This command extracts base64 embedded images from a markdown file.

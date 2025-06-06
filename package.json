@@ -1,6 +1,6 @@
 {
   "name": "@fmpanelli/md-tools",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Tools and utilities for markdown",
   "main": "dist/main.js",
   "scripts": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/fmpanelli/md-tools#readme",
   "bin": {
-    "md-unbundle": "dist/main.js"
+    "unbundle": "dist/main.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",

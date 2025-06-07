@@ -14,4 +14,7 @@ const outputFolder = cliArgs[1];
 
 extractPngsFromFile(inputFile, outputFolder).then(() => {
   exit(0);
+}).catch((err) => {
+  console.error(err);
+  exit(1);
 });

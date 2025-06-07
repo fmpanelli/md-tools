@@ -29,7 +29,6 @@ describe("extractPngsFromFile", () => {
     expect(writtenContent).toEqual(inputContent);
   });
 
-
   test("crlf are preserved", async () => {
     const testFilePath = "testdata/test-file-no-image-crlf.md";
     const testFilename = "test-file-no-image-crlf.md";
@@ -63,5 +62,15 @@ describe("extractPngsFromFile", () => {
       const filePath = path.join(tempTestDir, "images", filename);
       expect(await fs.readFile(filePath, "utf8")).toEqual(expectedContent);
     });
+  });
+
+  test("given an input file with images in the same folder as the target folder, it does nothing and returns an error", async () => {
+    const folder = path.join(tempTestDir, "same-folder-test");
+    await fs.mkdir(folder);
+    const testFilePath = path.join(folder, "test-file-with-images.md");
+    const originalFilePath = "testdata/test-file-with-images.md";
+    await fs.copyFile(originalFilePath, testFilePath);
+    expect(extractPngsFromFile(testFilePath, tempTestDir)).rejects.toMatchObject({});
+    expect(await fs.readFile(testFilePath, "utf8")).toEqual(await fs.readFile(originalFilePath, "utf8"));
   });
 });

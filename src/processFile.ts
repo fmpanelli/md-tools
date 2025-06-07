@@ -10,11 +10,18 @@ import { pipeline } from "node:stream";
  * @param sourcePath The path to the source file.
  * @param destinationPath The path to the destination file.
  */
-export function extractPngsFromFile(sourcePath: string, destinationPath: string): Promise<NodeJS.ErrnoException | string> {
+export function extractPngsFromFile(
+  sourcePath: string,
+  destinationPath: string
+): Promise<NodeJS.ErrnoException | string> {
   const absoluteSourcePath = path.resolve(sourcePath);
-  const sourceFilename = path.basename(sourcePath);
-  const absoluteDestinationPath = path.resolve(path.join(destinationPath, sourceFilename));
+  const absoluteDestinationPath = path.resolve(path.join(destinationPath, path.basename(sourcePath)));
   const imageDestinationPath = path.join(destinationPath, "images");
+  if (absoluteSourcePath === absoluteDestinationPath) {
+    return new Promise((__dirname, reject) => {
+      reject(new Error("Source and destination paths cannot be the same"));
+    });
+  }
   createFolderIfNotExists(imageDestinationPath);
 
   console.log(`Starting processing: ${absoluteSourcePath}`);
@@ -29,7 +36,7 @@ export function extractPngsFromFile(sourcePath: string, destinationPath: string)
     pipeline(readableStream, rl, pl, writableStream, (err) => {
       if (err) {
         reject(err);
-      } else resolve(`Processed ${sourceFilename}`);
+      } else resolve(`Processed ${path.basename(sourcePath)}`);
     });
   });
 }

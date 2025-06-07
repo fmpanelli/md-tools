@@ -70,7 +70,7 @@ describe("extractPngsFromFile", () => {
     const testFilePath = path.join(folder, "test-file-with-images.md");
     const originalFilePath = "testdata/test-file-with-images.md";
     await fs.copyFile(originalFilePath, testFilePath);
-    expect(extractPngsFromFile(testFilePath, tempTestDir)).rejects.toMatchObject({});
+    await expect(extractPngsFromFile(testFilePath, folder)).rejects.toMatchObject({});
     expect(await fs.readFile(testFilePath, "utf8")).toEqual(await fs.readFile(originalFilePath, "utf8"));
   });
 });

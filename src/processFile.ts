@@ -17,6 +17,8 @@ export function extractPngsFromFile(
   const absoluteSourcePath = path.resolve(sourcePath);
   const absoluteDestinationPath = path.resolve(path.join(destinationPath, path.basename(sourcePath)));
   const imageDestinationPath = path.join(destinationPath, "images");
+  console.debug(`Source path:      ${absoluteSourcePath}`)
+  console.debug(`Destination path: ${absoluteDestinationPath}`)
   if (absoluteSourcePath === absoluteDestinationPath) {
     return new Promise((__dirname, reject) => {
       reject(new Error("Source and destination paths cannot be the same"));

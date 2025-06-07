@@ -1,6 +1,6 @@
 {
   "name": "@fmpanelli/md-tools",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Tools and utilities for markdown",
   "main": "dist/main.js",
   "scripts": {
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/fmpanelli/md-tools#readme",
   "bin": {
+    "main": "dist/main.js",
     "unbundle": "dist/unbundle.js"
   },
   "devDependencies": {

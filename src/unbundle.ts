@@ -1,7 +1,7 @@
 #!/usr/bin/env node 
   
   import { exit } from "node:process";
-  import { extractPngsFromFile } from "./processFile";
+  import { extractPngsFromFile } from "./extractPngsFromFile";
   
   const cliArgs = process.argv.slice(2);
   if (cliArgs.length !== 2) {

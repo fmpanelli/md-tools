@@ -1,7 +1,8 @@
 import path from "path";
 import fs from "fs/promises"; // For asynchronous file operations
 import os from "os"; // For temporary directory creation
-import { extractPngsFromFile } from "../processFile";
+import { extractPngsFromFile } from "../extractPngsFromFile";
+
 
 describe("extractPngsFromFile", () => {
   const tempTestDirs: string[] = [];

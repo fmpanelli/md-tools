@@ -1,6 +1,6 @@
 {
   "name": "@fmpanelli/md-tools",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Tools and utilities for markdown",
   "main": "dist/main.js",
   "scripts": {

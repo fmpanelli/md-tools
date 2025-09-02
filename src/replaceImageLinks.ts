@@ -4,8 +4,10 @@
 export function replaceImageLinks(text: string): string {
   const regex = /!\[\]\[image(\d+)\]/g
   return text.replaceAll(regex,(_,p1)=>{
-    return `![](./images/image${p1}.png)`
+    /**return `![](./images/image${p1}.png)`**/
+    return `<Image size="xlarge" alt="" src="/md-tools/image${p1}.png"/>`
   })
 }
+
 
 

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { LineSplitterStream } from "./LineSplitterStream";
-import { LineProcessorStream } from "./LineProcessorStream";
+import { EmbeddedImageExtractor } from "./EmbeddedImageExtractor";
 import { pipeline } from "node:stream";
 
 /**
@@ -12,13 +12,16 @@ import { pipeline } from "node:stream";
  */
 export function extractPngsFromFile(
   sourcePath: string,
-  destinationPath: string
+  destinationPath: string,
+  basePathResolution:
+    | "fromInsideDestinationFolder"
+    | "fromOutideDestinationFolder" = "fromInsideDestinationFolder"
 ): Promise<NodeJS.ErrnoException | string> {
   const absoluteSourcePath = path.resolve(sourcePath);
   const absoluteDestinationPath = path.resolve(path.join(destinationPath, path.basename(sourcePath)));
   const imageDestinationPath = path.join(destinationPath, "images");
-  console.debug(`Source path:      ${absoluteSourcePath}`)
-  console.debug(`Destination path: ${absoluteDestinationPath}`)
+  console.debug(`Source path:      ${absoluteSourcePath}`);
+  console.debug(`Destination path: ${absoluteDestinationPath}`);
   if (absoluteSourcePath === absoluteDestinationPath) {
     return new Promise((__dirname, reject) => {
       reject(new Error("Source and destination paths cannot be the same"));
@@ -32,7 +35,7 @@ export function extractPngsFromFile(
   const readableStream = fs.createReadStream(absoluteSourcePath, { encoding: "utf8" });
   const writableStream = fs.createWriteStream(absoluteDestinationPath, { encoding: "utf8" });
   const rl = LineSplitterStream();
-  const pl = LineProcessorStream(destinationPath);
+  const pl = EmbeddedImageExtractor(destinationPath, basePathResolution);
 
   return new Promise((resolve, reject) => {
     pipeline(readableStream, rl, pl, writableStream, (err) => {

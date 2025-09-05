@@ -1,8 +1,7 @@
-import path from "path";
+import path from "node:path/posix";
 import fs from "fs/promises"; // For asynchronous file operations
 import os from "os"; // For temporary directory creation
 import { extractPngsFromFile } from "../extractPngsFromFile";
-
 
 describe("extractPngsFromFile", () => {
   const tempTestDirs: string[] = [];
@@ -53,6 +52,30 @@ describe("extractPngsFromFile", () => {
     await extractPngsFromFile(testFilePath, tempTestDir);
     const filePath = path.join(tempTestDir, testFilename);
     const expectedContent = await fs.readFile(expectedFilePath, "utf8");
+    const writtenContent = await fs.readFile(filePath, "utf8");
+    expect(writtenContent).toEqual(expectedContent);
+  });
+
+  test("given an input file with images, when using 'from' it copies the file stripping the images", async () => {
+    const testSubFolder = "testsubfolder";
+    const tempTestDir = path.join(await getTempTestDir(), testSubFolder);
+    const testFilePath = "testdata/test-file-with-images.md";
+    const testFilename = "test-file-with-images.md";
+    await extractPngsFromFile(testFilePath, tempTestDir, "fromOutideDestinationFolder");
+    const filePath = path.join(tempTestDir, testFilename);
+    const expectedContent =
+      `Test file\n` +
+      `\n` +
+      "An image:  \n" +
+      `![](${testSubFolder}/images/image1.png)  \n` +
+      "Another image:  \n" +
+      `![](${testSubFolder}/images/image2.png)\n` +
+      "\n" +
+      "See ya\\!  " +
+      "\n" +
+      "\n" +
+      "\n" +
+      "\n";
     const writtenContent = await fs.readFile(filePath, "utf8");
     expect(writtenContent).toEqual(expectedContent);
   });

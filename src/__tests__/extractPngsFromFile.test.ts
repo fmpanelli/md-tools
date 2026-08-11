@@ -1,6 +1,6 @@
 import path from "node:path/posix";
-import fs from "fs/promises"; // For asynchronous file operations
-import os from "os"; // For temporary directory creation
+import fs from "node:fs/promises"; // For asynchronous file operations
+import os from "node:os"; // For temporary directory creation
 import { extractPngsFromFile } from "../extractPngsFromFile";
 
 describe("extractPngsFromFile", () => {

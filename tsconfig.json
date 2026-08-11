@@ -1,18 +1,20 @@
 {
-  "extends": "@tsconfig/node20/tsconfig.json",
+  "extends": "@tsconfig/node22/tsconfig.json",
   "sourceMap": true, /* Generates corresponding '.map' file. */
   "compilerOptions": {
     "declaration": true, /* Generates corresponding '.d.ts' file. */
     "declarationMap": true,
+    "rootDir": ".",
     "outDir": "./dist",
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "include": [
-    "./src"
+    "./src",
+    "./node_modules/"
   ],
   "exclude": [
-    "**/*/*.test.*",
+    // "**/*/*.test.*",
   ]
 }

@@ -18,3 +18,9 @@ To launch it you can use:
 ```bash
 > npx --package=@fmpanelli/md-tools unbundle <markdown-file-path> <output-directory>
 ```
+## Updating dependencies
+
+Please, please, periodically run
+```bash
+npx npm-check-updates -i
+```

@@ -1,6 +1,6 @@
 import { FirstLineAndRest, getFirstLine } from "../LineSplitterStream";
 
-describe("splitByLf", () => {
+describe("getFirstLine", () => {
   test.each([
     ["", { firstLine: undefined, rest: Buffer.from("") }],
     ["a", { firstLine: undefined, rest: Buffer.from("a") }],
@@ -13,4 +13,5 @@ describe("splitByLf", () => {
   ])('when called with "%s" it returns %o', <T extends ArrayBufferLike>(input: string, expected: FirstLineAndRest<T>) => {
     expect(getFirstLine(Buffer.from(input))).toEqual(expected);
   });
+
 });

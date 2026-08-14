@@ -9,13 +9,15 @@
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
     "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
-    "isolatedModules": true
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "types": ["node", "jest"]
   },
   "include": [
-    "./src",
-    "./node_modules/"
+    "./src"
   ],
   "exclude": [
     // "**/*/*.test.*",
+    "./node_modules/"
   ]
 }

@@ -10,7 +10,7 @@ describe("splitByLf", () => {
     ["\r\n", { head: Buffer.from("\r\n"), tail: Buffer.from("") }],
     ["\n\r\n", { head: Buffer.from("\n"), tail: Buffer.from("\r\n") }],
     ["ab\r\r\n", { head: Buffer.from("ab\r\r\n"), tail: Buffer.from("") }],
-  ])('when called with "%s" it returns %o', (input: string, expected: BufferSearchResult) => {
+  ])('when called with "%s" it returns %o', <T extends ArrayBufferLike>(input: string, expected: BufferSearchResult<T>) => {
     expect(splitByLf(Buffer.from(input))).toEqual(expected);
   });
 });

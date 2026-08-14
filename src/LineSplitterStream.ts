@@ -1,12 +1,12 @@
-import { Buffer } from "buffer";
+import { Buffer } from "node:buffer";
 import { Transform } from "node:stream";
 
-export type BufferSearchResult = {
-  head: Buffer | undefined;
-  tail: Buffer;
+export type BufferSearchResult<T extends ArrayBufferLike> = {
+  head: Buffer<T> | undefined;
+  tail: Buffer<T>;
 };
 
-export function splitByLf(b: Buffer): BufferSearchResult {
+export function splitByLf<T extends ArrayBufferLike>(b: Buffer<T>): BufferSearchResult<T> {
   const LF = 0x0a; // \n
   const lfPos = b.indexOf(LF);
   if (lfPos >= 0) {

@@ -1,4 +1,4 @@
-import { FirstLineAndRest, getFirstLine } from "../LineSplitterStream";
+import { FirstLineAndRest, getNextLine } from "../LineSplitterStream";
 
 describe("getFirstLine", () => {
   test.each([
@@ -11,7 +11,7 @@ describe("getFirstLine", () => {
     ["\n\r\n", { firstLine: Buffer.from("\n"), rest: Buffer.from("\r\n") }],
     ["ab\r\r\n", { firstLine: Buffer.from("ab\r\r\n"), rest: Buffer.from("") }],
   ])('when called with "%s" it returns %o', <T extends ArrayBufferLike>(input: string, expected: FirstLineAndRest<T>) => {
-    expect(getFirstLine(Buffer.from(input))).toEqual(expected);
+    expect(getNextLine(Buffer.from(input))).toEqual(expected);
   });
 
 });

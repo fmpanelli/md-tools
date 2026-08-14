@@ -1,16 +1,16 @@
-import { BufferSearchResult, splitByLf } from "../LineSplitterStream";
+import { FirstLineAndRest, getFirstLine } from "../LineSplitterStream";
 
 describe("splitByLf", () => {
   test.each([
-    ["", { head: undefined, tail: Buffer.from("") }],
-    ["a", { head: undefined, tail: Buffer.from("a") }],
-    ["ab", { head: undefined, tail: Buffer.from("ab") }],
-    ["ab\r\n", { head: Buffer.from("ab\r\n"), tail: Buffer.from("") }],
-    ["ab\r\ncd\r\n", { head: Buffer.from("ab\r\n"), tail: Buffer.from("cd\r\n") }],
-    ["\r\n", { head: Buffer.from("\r\n"), tail: Buffer.from("") }],
-    ["\n\r\n", { head: Buffer.from("\n"), tail: Buffer.from("\r\n") }],
-    ["ab\r\r\n", { head: Buffer.from("ab\r\r\n"), tail: Buffer.from("") }],
-  ])('when called with "%s" it returns %o', <T extends ArrayBufferLike>(input: string, expected: BufferSearchResult<T>) => {
-    expect(splitByLf(Buffer.from(input))).toEqual(expected);
+    ["", { firstLine: undefined, rest: Buffer.from("") }],
+    ["a", { firstLine: undefined, rest: Buffer.from("a") }],
+    ["ab", { firstLine: undefined, rest: Buffer.from("ab") }],
+    ["ab\r\n", { firstLine: Buffer.from("ab\r\n"), rest: Buffer.from("") }],
+    ["ab\r\ncd\r\n", { firstLine: Buffer.from("ab\r\n"), rest: Buffer.from("cd\r\n") }],
+    ["\r\n", { firstLine: Buffer.from("\r\n"), rest: Buffer.from("") }],
+    ["\n\r\n", { firstLine: Buffer.from("\n"), rest: Buffer.from("\r\n") }],
+    ["ab\r\r\n", { firstLine: Buffer.from("ab\r\r\n"), rest: Buffer.from("") }],
+  ])('when called with "%s" it returns %o', <T extends ArrayBufferLike>(input: string, expected: FirstLineAndRest<T>) => {
+    expect(getFirstLine(Buffer.from(input))).toEqual(expected);
   });
 });

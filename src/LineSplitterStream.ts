@@ -1,34 +1,37 @@
 import { Buffer } from "node:buffer";
 import { Transform, TransformCallback } from "node:stream";
 
-export type BufferSearchResult<T extends ArrayBufferLike> = {
-  head: Buffer<T> | undefined;
-  tail: Buffer<T>;
+export type FirstLineAndRest<T extends ArrayBufferLike> = {
+  firstLine: Buffer<T> | undefined;
+  rest: Buffer<T>;
 };
 
-export function splitByLf<T extends ArrayBufferLike>(b: Buffer<T>): BufferSearchResult<T> {
+export function getFirstLine<T extends ArrayBufferLike>(b: Buffer<T>): FirstLineAndRest<T> {
   const LF = 0x0a; // \n
   const lfPos = b.indexOf(LF);
   if (lfPos >= 0) {
-    return { head: b.subarray(0, lfPos + 1), tail: b.subarray(lfPos + 1) };
+    return { firstLine: b.subarray(0, lfPos + 1), rest: b.subarray(lfPos + 1) };
   }
-  return { head: undefined, tail: b };
+  return { firstLine: undefined, rest: b };
 }
 
 export class LineSplitterStream extends Transform {
   private _buffer: Buffer = Buffer.alloc(0);
 
-  _transform(chunk: never, encoding: BufferEncoding, callback: TransformCallback): void {
+  private appendToBuffer(chunk: never, encoding: BufferEncoding) {
     const currentChunk = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding);
     this._buffer = Buffer.concat([this._buffer, currentChunk]);
+  }
 
+  _transform(chunk: never, encoding: BufferEncoding, callback: TransformCallback): void {
+    this.appendToBuffer(chunk, encoding);
     while (true) {
-      const searchResult = splitByLf(this._buffer);
-      if (searchResult.head === undefined) {
+      const firstLineAndRest = getFirstLine(this._buffer);
+      if (firstLineAndRest.firstLine === undefined) {
         break;
       }
-      this.push(searchResult.head);
-      this._buffer = searchResult.tail;
+      this.push(firstLineAndRest.firstLine);
+      this._buffer = firstLineAndRest.rest;
     }
 
     callback();

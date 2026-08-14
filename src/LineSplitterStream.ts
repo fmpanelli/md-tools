@@ -1,5 +1,5 @@
 import { Buffer } from "node:buffer";
-import { Transform } from "node:stream";
+import { Transform, TransformCallback } from "node:stream";
 
 export type BufferSearchResult<T extends ArrayBufferLike> = {
   head: Buffer<T> | undefined;
@@ -15,28 +15,29 @@ export function splitByLf<T extends ArrayBufferLike>(b: Buffer<T>): BufferSearch
   return { head: undefined, tail: b };
 }
 
-export const LineSplitterStream = () => {
-  let _buffer = Buffer.alloc(0);
-  let enc: BufferEncoding = "utf8";
-  const eatchunk = (chunk: Buffer, t: Transform) => {
-    _buffer = Buffer.concat([_buffer, chunk]);
+export class LineSplitterStream extends Transform {
+  private _buffer: Buffer = Buffer.alloc(0);
+
+  _transform(chunk: never, encoding: BufferEncoding, callback: TransformCallback): void {
+    const currentChunk = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding);
+    this._buffer = Buffer.concat([this._buffer, currentChunk]);
+
     while (true) {
-      const occ = splitByLf(_buffer);
-      if (occ.head == undefined) break;
-      _buffer = occ.tail;
-      t.push(occ.head, enc);
+      const searchResult = splitByLf(this._buffer);
+      if (searchResult.head === undefined) {
+        break;
+      }
+      this.push(searchResult.head);
+      this._buffer = searchResult.tail;
     }
-  };
-  return new Transform({
-    transform(chunk, encoding, callback) {
-      enc = encoding;
-      if (typeof chunk === "string") chunk = Buffer.from(chunk);
-      eatchunk(chunk, this);
-      callback();
-    },
-    flush(callback) {
-      if (_buffer.length > 0) this.push(_buffer);
-      callback();
-    },
-  });
-};
+
+    callback();
+  }
+
+  _flush(callback: TransformCallback): void {
+    if (this._buffer.length > 0) {
+      this.push(this._buffer);
+    }
+    callback();
+  }
+}

@@ -34,7 +34,7 @@ export function extractPngsFromFile(
 
   const readableStream = fs.createReadStream(absoluteSourcePath, { encoding: "utf8" });
   const writableStream = fs.createWriteStream(absoluteDestinationPath, { encoding: "utf8" });
-  const rl = LineSplitterStream();
+  const rl = new LineSplitterStream();
   const pl = EmbeddedImageExtractor(destinationPath, basePathResolution);
 
   return new Promise((resolve, reject) => {
